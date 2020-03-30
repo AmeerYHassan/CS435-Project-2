@@ -142,6 +142,11 @@ def BFTIterLinkedList(graph):
 randomGraph = Graph()
 randomGraph.createRandomUnweightedGraphIter(40)
 
+randomGraphDict = randomGraph.getAllNodes()
+for key in randomGraphDict:
+    print(f"{key} : {randomGraphDict[key]}")
+
+print("")
 print("Recursive DFS:\n"+str(randomGraph.DFSRec(2, 20))+"\n")
 print("Iterative DFS:\n"+str(randomGraph.DFSIter(2, 20))+"\n")
 
