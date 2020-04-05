@@ -3,7 +3,7 @@
 
 This project's purpose is to explore the functionality of graphs, implementing graphs, and implementing various different searching algorithms for graphs.
 
-### Part One:
+### Graphs:
 Part one had us implement various different functions, including an implementation of a graph class as well as various different searching and traversal algorithms.
 
 * Graph Class
@@ -94,3 +94,21 @@ Recursive BFT:
 [0, 11, 20, 3, 30, 1, 27, 33, 10, 15, 18, 19, 4, 22, 28, 9, 26, 35, 21, 39, 2, 32, 24, 5, 38, 25, 13, 29, 6, 14, 17, 8, 7, 12, 16, 23, 36, 31, 34, 37]
 ```
 
+### Directed Acyclic Graphs:
+The `P4 - Directed Acyclic Graphs.py` file includes implementation for creating Directed Acyclic Graphs. This file includes a class for DAG representation, as well as a function to generate a random DAG, a function that executes Kahn's algorithm, and a function that executes a modified DFS algorithm.
+
+* DirectedGraph Class
+  * This class uses an adjacency list to represent the nodes. The adjacency list uses a dictionary, where the key is the node value, and the neighbors is a set.
+
+  * `addNode(nodeVal)` - Adds a node to the graph. The node is just an empty set.
+  * `addDirectedEdge(first, second)` - Adds a directed edge between the first and second nodes. The edge is one way, and can only be traversed in the order of `first → second`.
+  * `removeDirectedEdge(first, second)` - Removes a directed edge between the first and second nodes.
+  * `getAllNodes()` - This returns the dictionary of nodes, effectively returning a representation of the graph.
+
+* TopSort Class
+  * This class holds two main functions, the `Kahns` function and the `mDFS` function. Both of these functions return a traversal of the entire graph, resolving any dependency issues for certain nodes.
+
+  *`Kahns(graph)` - Given a graph, this function will return a traversal of all the nodes in the class using Kahn's algorithm.
+  *`mDFS(graph)` - Given a graph, this function will return a traversal of all the nodes in the class using a modified version of DFS.
+
+`createRandomDAGIter(n)` - Returns a graph that is a DAG with n nodes with random edges between the nodes.
