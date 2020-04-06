@@ -1,3 +1,5 @@
+## Important! - These scripts require Python 3
+---
 # CS435 Project 2
 ## Exploring graphs and graph-searching functions
 

@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import random
 
 class DirectedGraph:
@@ -91,7 +92,7 @@ def createRandomDAGIter(n):
                 randomDag.graphNodes[i].add(random.randint(i+1, n-1))
     return randomDag
 
-currDAG = createRandomDAGIter(10)
+currDAG = createRandomDAGIter(1000)
 topSortObj = TopSort()
 
 print(topSortObj.Kahns(currDAG))
