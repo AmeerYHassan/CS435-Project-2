@@ -1,5 +1,3 @@
-
-
 import random
 import math
 
@@ -22,7 +20,8 @@ class WeightedGraph:
         self.graphNodes[first].neighbors[second] = edgeWeight
     
     def removeDirectedEdge(self, first, second):
-        self.graphNodes[first].neighbors.pop(second)
+        if second in self.graphNodes[first].neighbors:
+            self.graphNodes[first].neighbors.pop(second)
     
     def findNode(self, nodeVal):
         return self.graphNodes[nodeVal]
@@ -84,7 +83,6 @@ def dijkstras(start, graph):
 
     return distanceDict
 
-# Returns the node with smallest distance (Taken from repl.it)
 def minDist(distanceDict, visitedNodes):
     ans = None
     m = math.inf
@@ -93,3 +91,16 @@ def minDist(distanceDict, visitedNodes):
             m = distanceDict[curr]
             ans = curr
     return ans
+
+myGraph = WeightedGraph()
+myGraph.addNode(1)
+myGraph.addNode(2)
+myGraph.addNode(3)
+myGraph.addNode(4)
+myGraph.addWeightedEdge(1, 2, 1)
+myGraph.addWeightedEdge(1, 3, 1)
+myGraph.addWeightedEdge(4, 1, 2)
+myGraph.removeDirectedEdge(1, 2)
+myGraph.removeDirectedEdge(1, 3)
+
+print(myGraph.getAllNodes())

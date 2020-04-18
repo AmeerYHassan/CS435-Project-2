@@ -153,3 +153,7 @@ print("Iterative DFS:\n"+str(randomGraph.DFSIter(2, 20))+"\n")
 
 print("Recursive BFT:\n"+str(randomGraph.BFTRec())+"\n")
 print("Recursive BFT:\n"+str(randomGraph.BFTIter())+"\n")
+
+linkedGraph = Graph()
+linkedGraph.createLinkedList(10000)
+BFTIterLinkedList(linkedGraph)
