@@ -15,8 +15,9 @@ class Graph():
         self.adjList[second].add(first)
 
     def removeUndirectedEdge(self, first, second):
-        self.adjList[first].remove(second)
-        self.adjList[second].remove(first)
+        if second in self.adjList[first]:
+            self.adjList[first].remove(second)
+            self.adjList[second].remove(first)
 
     def getAllNodes(self):
         return self.adjList
@@ -39,12 +40,10 @@ class Graph():
             self.addUndirectedEdge(i, i+1)
     
     def DFSRec(self, start, end):
-        # Recursive DFS, implemented with a stack.
         visited = []
         nodeStack = [start]
         self._DFSRec(start, end, visited, nodeStack)
 
-        # If the last node in the DFS is the end node, print out the visited order.
         if (visited[-1] is end):
             return visited
         else:
@@ -57,11 +56,9 @@ class Graph():
             return
         visited.append(currNode)
 
-        # If we have found the target, return.
         if (currNode is end):
             return
         
-        # Add all of the neighbors to the stack.
         for neighbor in self.adjList[currNode]:
             if neighbor not in visited:
                 nodeStack.append(neighbor)
@@ -90,11 +87,9 @@ class Graph():
         unvisitedNodes = [*self.adjList]
         visited = []
 
-        # Call the helper function
         self._BFTRec(unvisitedNodes, visited, [unvisitedNodes[0]])
         return visited
     
-    # Helper function
     def _BFTRec(self, unvisitedNodes, visited, nodeQueue):
         if (len(unvisitedNodes) is 0):
             return visited
@@ -107,7 +102,6 @@ class Graph():
             if neighbor not in visited and neighbor in unvisitedNodes and neighbor not in nodeQueue:
                 nodeQueue.append(neighbor)
 
-        # If the queue is empty but there are still unvisitedNodes, add the first unvisited Node.
         if (len(nodeQueue) is 0 and len(unvisitedNodes) is not 0):
             nodeQueue.append(unvisitedNodes[0])
         
@@ -119,7 +113,6 @@ class Graph():
         visited = []
         nodeQueue = [unvisitedNodes[0]]
 
-        # While the queue is not empty...
         while (nodeQueue):
             currNode = nodeQueue.pop(0)
             visited.append(currNode)
@@ -139,6 +132,7 @@ def BFTRecLinkedList(graph):
 
 def BFTIterLinkedList(graph):
     print(graph.BFTIter())
+
 
 randomGraph = Graph()
 randomGraph.createRandomUnweightedGraphIter(40)
