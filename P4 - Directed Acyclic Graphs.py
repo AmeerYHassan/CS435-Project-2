@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import random
+import collections
 
 class DirectedGraph:
     def __init__(self):
@@ -7,22 +8,29 @@ class DirectedGraph:
         self.graphNodes = {}
     
     def addNode(self, nodeVal):
-        self.graphNodes[nodeVal] = set()
+        if nodeVal not in self.graphNodes:
+            self.graphNodes[nodeVal] = set()
     
     def addDirectedEdge(self, first, second):
-        self.graphNodes[first].add(second)
+        if first in self.graphNodes:
+            self.graphNodes[first].add(second)
     
     def removeDirectedEdge(self, first, second):
-        self.graphNodes[first].remove(second)
+        if second in self.graphNodes[first]:
+            self.graphNodes[first].remove(second)
     
     def getAllNodes(self):
         return self.graphNodes
+    
+    def getNeighbors(self, node):
+        return self.graphNodes[node]
 
 class TopSort:
+    @staticmethod
     def Kahns(self, graph):
         dependencyDict = genDependencyDict(graph)
         finalOutput = []
-        dependencyQueue = []
+        dependencyQueue = collections.deque()
 
         updateDependencyDict(dependencyDict, dependencyQueue)
         
@@ -34,7 +42,7 @@ class TopSort:
                 dependencyDict[neighbor] -= 1
 
             updateDependencyDict(dependencyDict, dependencyQueue)
-            dependencyQueue.pop(0)
+            dependencyQueue.popleft()
 
         return finalOutput
 
@@ -49,15 +57,14 @@ class TopSort:
             if (not visitedDict[node]):
                 self.mDFS_Helper(node, nodeStack, visitedDict, graph)
 
-        nodeStack.reverse()
         return nodeStack
-
+        
     def mDFS_Helper(self, currNode, stack, visitedDict, graph):
         visitedDict[currNode] = True
         for neighbor in graph.graphNodes[currNode]:
             if (not visitedDict[neighbor]):
                 self.mDFS_Helper(neighbor, stack, visitedDict, graph)
-        stack.append(currNode)
+        stack.insert(0, currNode)
 
 def updateDependencyDict(dependencyDict, dependencyQueue):
     for node in list(dependencyDict):
@@ -73,7 +80,7 @@ def genDependencyDict(graph):
         dependencyDict[node] = 0
     
     for node in nodeList:
-        for neighbor in graph.graphNodes[node]:
+        for neighbor in graph.getNeighbors(node):
             dependencyDict[neighbor]+=1
     
     return dependencyDict
@@ -89,11 +96,22 @@ def createRandomDAGIter(n):
             if (i+1 == n-1 or i+1 > n-1):
                 continue
             else:
-                randomDag.graphNodes[i].add(random.randint(i+1, n-1))
+                randomDag.addDirectedEdge(i, random.randint(i+1, n-1))
     return randomDag
 
-currDAG = createRandomDAGIter(1000)
-topSortObj = TopSort()
+randomGraph = createRandomDAGIter(100)
+print(TopSort().mDFS(randomGraph))
 
-print(topSortObj.Kahns(currDAG))
-print(topSortObj.mDFS(currDAG))
+directedG = DirectedGraph()
+directedG.addNode(1)
+directedG.addNode(2)
+directedG.addNode(3)
+directedG.addNode(4)
+print(directedG.getAllNodes())
+directedG.addDirectedEdge(1, 2)
+directedG.addDirectedEdge(1, 3)
+directedG.addDirectedEdge(2, 4)
+print(directedG.getAllNodes())
+directedG.removeDirectedEdge(1, 2)
+directedG.removeDirectedEdge(2, 4)
+print(directedG.getAllNodes())
