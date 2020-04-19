@@ -22,34 +22,18 @@ class Graph():
     def getAllNodes(self):
         return self.adjList
 
-    def createRandomUnweightedGraphIter(self, n):
-        # Generate nodes 0-(n-1) and add them to the graph
-        for i in range(n):
-            self.addNode(i)
-        
-        # Generate two random numbers up to n, create an edge between them.
-        for i in range(n):
-            self.addUndirectedEdge(random.randint(0, n-1), random.randint(0, n-1))
-
-    def createLinkedList(self, n):
-        # Create nodes up to n, add edges between adjacent nodes
-        for i in range(n):
-            self.addNode(i)
-        
-        for i in range(n-1):
-            self.addUndirectedEdge(i, i+1)
-    
-    def DFSRec(self, start, end):
+class GraphSearch:
+    def DFSRec(self, start, end, graph):
         visited = []
         nodeStack = [start]
-        self._DFSRec(start, end, visited, nodeStack)
+        self._DFSRec(start, end, visited, nodeStack, graph)
 
         if (visited[-1] is end):
             return visited
         else:
             return None
     
-    def _DFSRec(self, start, end, visited, nodeStack):
+    def _DFSRec(self, start, end, visited, nodeStack, graph):
         if (nodeStack):
             currNode = nodeStack.pop()
         else:
@@ -59,13 +43,13 @@ class Graph():
         if (currNode is end):
             return
         
-        for neighbor in self.adjList[currNode]:
+        for neighbor in graph.adjList[currNode]:
             if neighbor not in visited:
                 nodeStack.append(neighbor)
         
-        self._DFSRec(start, end, visited, nodeStack)
+        self._DFSRec(start, end, visited, nodeStack, graph)
             
-    def DFSIter(self, start, end):
+    def DFSIter(self, start, end, graph):
         visited = []
         nodeStack = [start]
 
@@ -76,21 +60,21 @@ class Graph():
             if currNode is end:
                 return visited
 
-            for neighbor in self.adjList[currNode]:
+            for neighbor in graph.adjList[currNode]:
                 if neighbor not in visited:
                     nodeStack.append(neighbor)
 
         return None
 
-    def BFTRec(self):
+    def BFTRec(self, graph):
         # Convert all the dictionary keys into a list
-        unvisitedNodes = [*self.adjList]
+        unvisitedNodes = [*graph.adjList]
         visited = []
 
-        self._BFTRec(unvisitedNodes, visited, [unvisitedNodes[0]])
+        self._BFTRec(unvisitedNodes, visited, [unvisitedNodes[0]], graph)
         return visited
     
-    def _BFTRec(self, unvisitedNodes, visited, nodeQueue):
+    def _BFTRec(self, unvisitedNodes, visited, nodeQueue, graph):
         if (len(unvisitedNodes) is 0):
             return visited
         
@@ -98,18 +82,18 @@ class Graph():
         visited.append(currNode)
         unvisitedNodes.remove(currNode)
 
-        for neighbor in self.adjList[currNode]:
+        for neighbor in graph.adjList[currNode]:
             if neighbor not in visited and neighbor in unvisitedNodes and neighbor not in nodeQueue:
                 nodeQueue.append(neighbor)
 
         if (len(nodeQueue) is 0 and len(unvisitedNodes) is not 0):
             nodeQueue.append(unvisitedNodes[0])
         
-        return (self._BFTRec(unvisitedNodes, visited, nodeQueue))
+        return (self._BFTRec(unvisitedNodes, visited, nodeQueue, graph))
 
-    def BFTIter(self):
+    def BFTIter(self, graph):
         # Convert the dictionary keys into a list.
-        unvisitedNodes = [*self.adjList]
+        unvisitedNodes = [*graph.adjList]
         visited = []
         nodeQueue = [unvisitedNodes[0]]
 
@@ -118,7 +102,7 @@ class Graph():
             visited.append(currNode)
             unvisitedNodes.remove(currNode)
 
-            for neighbor in self.adjList[currNode]:
+            for neighbor in graph.adjList[currNode]:
                 if neighbor not in visited and neighbor in unvisitedNodes and neighbor not in nodeQueue:
                         nodeQueue.append(neighbor)
             
@@ -127,27 +111,46 @@ class Graph():
 
         return visited
 
+def createLinkedList(n):
+    # Create nodes up to n, add edges between adjacent nodes
+    linkedGraph = Graph()
+    for i in range(n):
+        linkedGraph.addNode(i)
+    
+    for i in range(n-1):
+        linkedGraph.addUndirectedEdge(i, i+1)
+    
+    return linkedGraph
+
+def createRandomUnweightedGraphIter(n):
+    randGraph = Graph()
+    # Generate nodes 0-(n-1) and add them to the graph
+    for i in range(n):
+        randGraph.addNode(i)
+    
+    # Generate two random numbers up to n, create an edge between them.
+    for i in range(n):
+        randGraph.addUndirectedEdge(random.randint(0, n-1), random.randint(0, n-1))
+    return randGraph
+
 def BFTRecLinkedList(graph):
-    print(graph.BFTRec())
+    print(GraphSearch.BFTRec(graph))
 
 def BFTIterLinkedList(graph):
-    print(graph.BFTIter())
+    print(GraphSearch.BFTIter(graph, graph))
 
-
-randomGraph = Graph()
-randomGraph.createRandomUnweightedGraphIter(40)
+randomGraph = createRandomUnweightedGraphIter(40)
 
 randomGraphDict = randomGraph.getAllNodes()
 for key in randomGraphDict:
     print(f"{key} : {randomGraphDict[key]}")
 
 print("")
-print("Recursive DFS:\n"+str(randomGraph.DFSRec(2, 20))+"\n")
-print("Iterative DFS:\n"+str(randomGraph.DFSIter(2, 20))+"\n")
+print("Recursive DFS:\n"+str(GraphSearch().DFSRec(2, 20, randomGraph))+"\n")
+print("Iterative DFS:\n"+str(GraphSearch().DFSIter(2, 20, randomGraph))+"\n")
 
-print("Recursive BFT:\n"+str(randomGraph.BFTRec())+"\n")
-print("Recursive BFT:\n"+str(randomGraph.BFTIter())+"\n")
+print("Recursive BFT:\n"+str(GraphSearch().BFTRec(randomGraph))+"\n")
+print("Iterative BFT:\n"+str(GraphSearch().BFTIter(randomGraph))+"\n")
 
-linkedGraph = Graph()
-linkedGraph.createLinkedList(10000)
+linkedGraph = createLinkedList(40)
 BFTIterLinkedList(linkedGraph)
